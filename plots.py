@@ -14,7 +14,8 @@ def plot_shap_analysis(base_model, input_row, pred_class, feature_cols):
         else:
             shap_vals_for_class = shap_values[0]
         
-        readable_names = {k: k.replace('_', ' ').title() for k in feature_cols}
+        # Friendly Names for Patients
+        readable_names = {k: k.replace('_', ' ').replace('baseline', '').title() for k in feature_cols}
         
         importance_df = pd.DataFrame({
             'Feature': [readable_names.get(f, f) for f in feature_cols],
@@ -22,7 +23,7 @@ def plot_shap_analysis(base_model, input_row, pred_class, feature_cols):
         })
         
         importance_df['Abs_SHAP'] = importance_df['SHAP Value'].abs()
-        importance_df = importance_df.sort_values('Abs_SHAP', ascending=False).head(8)
+        importance_df = importance_df.sort_values('Abs_SHAP', ascending=False).head(5) # Only show top 5 for simplicity
         
         fig = go.Figure()
         colors = ['#ff6b6b' if x > 0 else '#2ecc71' for x in importance_df['SHAP Value']]
@@ -30,15 +31,16 @@ def plot_shap_analysis(base_model, input_row, pred_class, feature_cols):
         fig.add_trace(go.Bar(
             y=importance_df['Feature'], x=importance_df['SHAP Value'],
             orientation='h', marker=dict(color=colors),
-            text=[f"{val:.3f}" for val in importance_df['SHAP Value']],
-            textposition='outside',
+            textposition='none', # Hide numbers for cleaner look
         ))
         
         fig.update_layout(
-            title="Key Factors Influencing AI Decision",
-            xaxis_title="Impact (SHAP Value)",
-            template="plotly_dark", height=400, showlegend=False,
-            margin=dict(l=200)
+            title="What influenced this result?",
+            xaxis_title="Impact",
+            template="plotly_dark", height=300, showlegend=False,
+            margin=dict(l=20, r=20, t=40, b=20),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)'
         )
         return fig, importance_df
     except Exception as e:
@@ -55,30 +57,21 @@ def plot_vital_trends(baseline_data, last_data, risk_class):
     
     fig = go.Figure()
     
-    # Temp
-    fig.add_trace(go.Scatter(x=hours, y=temp_trend, name='Temp (°C)', line=dict(color='#ff6b6b', width=3), mode='lines+markers'))
+    fig.add_trace(go.Scatter(x=hours, y=temp_trend, name='Temp', line=dict(color='#ff6b6b', width=4), mode='lines'))
+    fig.add_trace(go.Scatter(x=hours, y=hr_trend, name='Heart Rate', line=dict(color='#4ecdc4', width=4), mode='lines', yaxis='y2'))
     
-    # Heart Rate (Right Axis)
-    fig.add_trace(go.Scatter(x=hours, y=hr_trend, name='HR (bpm)', line=dict(color='#4ecdc4', width=3), mode='lines+markers', yaxis='y2'))
-    
-    # ⚠️ التصحيح هنا: استخدام الهيكلية الجديدة لخصائص العنوان
     fig.update_layout(
-        title="24h Vital Signs Trends",
-        xaxis=dict(title="Time (hours)"),
-        yaxis=dict(
-            title=dict(text="Temperature (°C)", font=dict(color='#ff6b6b'))
-        ),
+        title="Your 24h Trends",
+        xaxis=dict(title="Hours ago", showgrid=False),
+        yaxis=dict(title=dict(text="Temp (°C)", font=dict(color='#ff6b6b')), showgrid=True, gridcolor='#333'),
         yaxis2=dict(
-            title=dict(text="Heart Rate (bpm)", font=dict(color='#4ecdc4')),
-            anchor='x', 
-            overlaying='y', 
-            side='right'
+            title=dict(text="HR (bpm)", font=dict(color='#4ecdc4')),
+            anchor='x', overlaying='y', side='right', showgrid=False
         ),
-        template="plotly_dark", height=450, hovermode='x unified',
+        template="plotly_dark", height=350, hovermode='x unified',
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
         legend=dict(orientation="h", y=1.1, x=0.5, xanchor="center")
     )
     
-    if risk_class == 2:
-        fig.add_hrect(y0=37.5, y1=42, fillcolor="red", opacity=0.1, layer="below", annotation_text="Fever Zone")
-
     return fig
