@@ -8,12 +8,12 @@ CUSTOM_CSS = """
 html, body { font-family: 'Inter', sans-serif; font-size: 16px; background-color: #0f111a; }
 .stApp { background-color: #0f111a; }
 
-/* إخفاء عناصر ستريم ليت الافتراضية لجعل التطبيق يبدو حقيقياً */
+/* إخفاء عناصر ستريم ليت الافتراضية */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-/* Card Style imitating Mobile Cards */
+/* Mobile Card Style */
 .mobile-card {
     background: #1e2130;
     border-radius: 24px;
@@ -68,6 +68,7 @@ p { color: #a0a6c0; line-height: 1.6; }
     border: none;
     box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
     transition: transform 0.2s;
+    color: white !important;
 }
 .stButton>button:hover {
     transform: scale(1.02);
@@ -112,8 +113,7 @@ HIGH_PRESET = {
     "baseline_activity_index": 0.5, "last_activity": 0.2,
 }
 
-# 3. Patient Guidance (PROACTIVE STEPS - Patient Centric)
-# هنا التغيير الكبير: نخاطب المريض ونقول له ماذا يفعل بالضبط
+# 3. Patient Guidance (هذا هو الجزء الجديد الذي يسبب الخطأ لعدم وجوده)
 PATIENT_GUIDANCE = {
     0: {
         "title": "You are doing great! 🌟",
