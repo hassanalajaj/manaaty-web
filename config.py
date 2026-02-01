@@ -7,13 +7,11 @@ CUSTOM_CSS = """
 
 * { font-family: 'Cairo', sans-serif; }
 
-/* الخلفية العامة للتطبيق */
 .stApp {
     background: linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 100%);
     color: #e4e6eb;
 }
 
-/* إخفاء القوائم الجانبية والعناصر الافتراضية */
 section[data-testid="stSidebar"] { display: none; }
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
@@ -29,29 +27,29 @@ header { visibility: hidden; }
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* ====== Status Badges ====== */
-.status-badge {
-    display: inline-block;
-    padding: 8px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 8px 0;
-}
-.status-normal { background: linear-gradient(135deg, #00d4aa, #00a884); color: white; box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3); }
-.status-warning { background: linear-gradient(135deg, #ffb74d, #ff9800); color: white; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3); }
-.status-danger { 
-    background: linear-gradient(135deg, #ff5252, #f44336); 
-    color: white; 
-    box-shadow: 0 4px 15px rgba(255, 82, 82, 0.4);
-    animation: pulse-danger 2s infinite; 
+/* ====== Critical Alert Animation (الوميض السريع) ====== */
+@keyframes flash-red {
+    0% { background-color: rgba(255, 0, 0, 0.1); border: 2px solid red; box-shadow: 0 0 20px red; }
+    50% { background-color: rgba(255, 0, 0, 0.4); border: 2px solid #ff4444; box-shadow: 0 0 50px red; }
+    100% { background-color: rgba(255, 0, 0, 0.1); border: 2px solid red; box-shadow: 0 0 20px red; }
 }
 
-@keyframes pulse-danger {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
-    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(244, 67, 54, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+.critical-alert-card {
+    animation: flash-red 0.8s infinite; /* وميض سريع جداً */
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
+
+/* ====== Status Badges ====== */
+.status-badge {
+    display: inline-block; padding: 8px 20px; border-radius: 25px;
+    font-size: 14px; font-weight: 600; margin: 8px 0;
+}
+.status-normal { background: linear-gradient(135deg, #00d4aa, #00a884); color: white; }
+.status-warning { background: linear-gradient(135deg, #ffb74d, #ff9800); color: white; }
+.status-danger { background: linear-gradient(135deg, #ff5252, #f44336); color: white; }
 
 /* ====== Vitals Rows ====== */
 .vital-row {
@@ -73,13 +71,11 @@ header { visibility: hidden; }
     background: linear-gradient(135deg, #ff5252 0%, #c62828 100%);
     color: white; padding: 16px; border-radius: 16px;
     text-align: center; font-weight: 600; margin: 8px 0; cursor: pointer;
-    animation: pulse-danger 1.5s infinite;
+    animation: flash-red 1s infinite;
 }
 
-/* ====== Streamlit Button Override ====== */
 .stButton > button {
-    width: 100%; border-radius: 16px; height: 50px; border: none;
-    font-weight: 700; font-size: 16px;
+    width: 100%; border-radius: 16px; height: 50px; border: none; font-weight: 700;
 }
 </style>
 """
