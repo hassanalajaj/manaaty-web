@@ -27,19 +27,15 @@ header { visibility: hidden; }
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* ====== Critical Alert Animation (الوميض السريع) ====== */
-@keyframes flash-red {
-    0% { background-color: rgba(255, 0, 0, 0.1); border: 2px solid red; box-shadow: 0 0 20px red; }
-    50% { background-color: rgba(255, 0, 0, 0.4); border: 2px solid #ff4444; box-shadow: 0 0 50px red; }
-    100% { background-color: rgba(255, 0, 0, 0.1); border: 2px solid red; box-shadow: 0 0 20px red; }
+/* ====== Critical Alert Animation (Logo & Card) ====== */
+@keyframes flash-red-logo {
+    0% { filter: drop-shadow(0 0 0px rgba(255, 0, 0, 0)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 30px rgba(255, 0, 0, 1)); transform: scale(1.1); }
+    100% { filter: drop-shadow(0 0 0px rgba(255, 0, 0, 0)); transform: scale(1); }
 }
 
-.critical-alert-card {
-    animation: flash-red 0.8s infinite; /* وميض سريع جداً */
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 20px;
+.critical-logo {
+    animation: flash-red-logo 0.8s infinite !important;
 }
 
 /* ====== Status Badges ====== */
@@ -71,7 +67,7 @@ header { visibility: hidden; }
     background: linear-gradient(135deg, #ff5252 0%, #c62828 100%);
     color: white; padding: 16px; border-radius: 16px;
     text-align: center; font-weight: 600; margin: 8px 0; cursor: pointer;
-    animation: flash-red 1s infinite;
+    animation: flash-red-logo 1s infinite; /* نفس وميض اللوجو */
 }
 
 .stButton > button {
