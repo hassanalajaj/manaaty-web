@@ -52,9 +52,7 @@ def plot_vital_trends(baseline_data, last_data, risk_class):
 
     temp_trend = get_trend(baseline_data['temp'], last_data['temp'])
     hr_trend = get_trend(baseline_data['hr'], last_data['hr'])
-    rr_trend = get_trend(baseline_data['rr'], last_data['rr'])
-    spo2_trend = get_trend(baseline_data['spo2'], last_data['spo2'])
-
+    
     fig = go.Figure()
     
     # Temp
@@ -63,11 +61,19 @@ def plot_vital_trends(baseline_data, last_data, risk_class):
     # Heart Rate (Right Axis)
     fig.add_trace(go.Scatter(x=hours, y=hr_trend, name='HR (bpm)', line=dict(color='#4ecdc4', width=3), mode='lines+markers', yaxis='y2'))
     
+    # ⚠️ التصحيح هنا: استخدام الهيكلية الجديدة لخصائص العنوان
     fig.update_layout(
         title="24h Vital Signs Trends",
         xaxis=dict(title="Time (hours)"),
-        yaxis=dict(title="Temperature (°C)", titlefont=dict(color='#ff6b6b')),
-        yaxis2=dict(title="Heart Rate (bpm)", titlefont=dict(color='#4ecdc4'), anchor='x', overlaying='y', side='right'),
+        yaxis=dict(
+            title=dict(text="Temperature (°C)", font=dict(color='#ff6b6b'))
+        ),
+        yaxis2=dict(
+            title=dict(text="Heart Rate (bpm)", font=dict(color='#4ecdc4')),
+            anchor='x', 
+            overlaying='y', 
+            side='right'
+        ),
         template="plotly_dark", height=450, hovermode='x unified',
         legend=dict(orientation="h", y=1.1, x=0.5, xanchor="center")
     )
