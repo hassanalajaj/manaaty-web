@@ -3,6 +3,7 @@ pandas
 numpy
 scikit-learn
 xgboost
-plotly
 shap
 matplotlib
+seaborn
+plotly
