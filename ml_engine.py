@@ -1,23 +1,37 @@
 # ml_engine.py
 import streamlit as st
 import pandas as pd
+import os
+import joblib  # مكتبة للحفظ والاسترجاع السريع
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
+# اسم ملف الموديل المحفوظ
+MODEL_FILE = "manaaty_model_v1.pkl"
+
 @st.cache_resource
 def load_and_train_model():
-    # ⚠️ IMPORTANT: Ensure your CSV is renamed to this:
-    data_path = "patient_data.csv"
+    # 1. الخطة أ: محاولة تحميل الموديل الجاهز فوراً
+    if os.path.exists(MODEL_FILE):
+        print("⚡ Loading saved model from disk...")
+        saved_data = joblib.load(MODEL_FILE)
+        return (saved_data['model'], 
+                saved_data['base_model'], 
+                saved_data['metrics'], 
+                saved_data['feature_cols'])
+
+    # 2. الخطة ب: الموديل غير موجود؟ ندربه الآن (للمرة الأولى فقط)
+    print("🐢 No saved model found. Training now...")
     
+    data_path = "patient_data.csv"
     try:
         df = pd.read_csv(data_path)
     except FileNotFoundError:
-        st.error(f"❌ Error: File '{data_path}' not found. Please rename your uploaded CSV to 'patient_data.csv'.")
+        st.error(f"❌ Error: File '{data_path}' not found.")
         st.stop()
 
-    # Exact columns from your specific CSV file
     feature_cols = [
         "age", "baseline_temp_c", "baseline_hr_bpm", "baseline_hrv_rmssd_ms",
         "baseline_spo2", "baseline_rr_bpm", "baseline_activity_index",
@@ -27,10 +41,9 @@ def load_and_train_model():
         "hrv_slope_0_24", "rr_slope_0_24", "activity_slope_0_24",
     ]
 
-    # Verify columns exist
     missing = [col for col in feature_cols if col not in df.columns]
     if missing:
-        st.error(f"❌ Missing columns in CSV: {missing}")
+        st.error(f"❌ Missing columns: {missing}")
         st.stop()
 
     X = df[feature_cols]
@@ -40,7 +53,7 @@ def load_and_train_model():
         X, y, test_size=0.2, random_state=42, stratify=y
     )
 
-    # Models
+    # Training
     rf = RandomForestClassifier(n_estimators=300, random_state=42, n_jobs=-1, class_weight="balanced", max_depth=15)
     xgb = XGBClassifier(n_estimators=300, random_state=42, n_jobs=-1, max_depth=10, learning_rate=0.1)
     gb = GradientBoostingClassifier(n_estimators=200, random_state=42, max_depth=8)
@@ -52,7 +65,7 @@ def load_and_train_model():
     
     model.fit(X_train, y_train)
     
-    # Validation Metrics
+    # Metrics
     y_pred = model.predict(X_test)
     metrics = {
         'accuracy': accuracy_score(y_test, y_pred),
@@ -63,6 +76,16 @@ def load_and_train_model():
     }
 
     base_model = rf.fit(X_train, y_train)
+
+    # 3. حفظ كل شيء في ملف واحد
+    package = {
+        'model': model,
+        'base_model': base_model,
+        'metrics': metrics,
+        'feature_cols': feature_cols
+    }
+    joblib.dump(package, MODEL_FILE)
+    print("✅ Model saved successfully!")
 
     return model, base_model, metrics, feature_cols
 
