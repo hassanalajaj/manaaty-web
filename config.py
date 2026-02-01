@@ -1,82 +1,90 @@
 # config.py
 
-# 1. CSS Design (Mobile App Style - Modern & Clean)
+# ==================== MOBILE-FIRST CSS ====================
 CUSTOM_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
 
-html, body { font-family: 'Inter', sans-serif; font-size: 16px; background-color: #0f111a; }
-.stApp { background-color: #0f111a; }
+* { font-family: 'Cairo', sans-serif; }
 
-/* إخفاء عناصر ستريم ليت الافتراضية */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-
-/* Mobile Card Style */
-.mobile-card {
-    background: #1e2130;
-    border-radius: 24px;
-    padding: 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    border: 1px solid #2d324a;
+/* الخلفية العامة للتطبيق */
+.stApp {
+    background: linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 100%);
+    color: #e4e6eb;
 }
 
-/* Typography */
-h1, h2, h3 { color: #ffffff; letter-spacing: -0.5px; }
-p { color: #a0a6c0; line-height: 1.6; }
+/* إخفاء القوائم الجانبية والعناصر الافتراضية */
+section[data-testid="stSidebar"] { display: none; }
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header { visibility: hidden; }
 
-/* Status Indicators */
+/* ====== Mobile Card ====== */
+.mobile-card {
+    background: linear-gradient(145deg, #1e2442 0%, #161a2e 100%);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 12px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ====== Status Badges ====== */
 .status-badge {
     display: inline-block;
-    padding: 8px 16px;
-    border-radius: 99px;
-    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 25px;
     font-size: 14px;
-    margin-bottom: 12px;
-}
-.status-low { background: #1b4d3e; color: #4ade80; border: 1px solid #22c55e; }
-.status-mod { background: #452c15; color: #fbbf24; border: 1px solid #f59e0b; }
-.status-high { background: #4c1d1d; color: #f87171; border: 1px solid #ef4444; animation: pulse 2s infinite; }
-
-/* Action Plan Steps */
-.step-box {
-    background: rgba(255,255,255,0.05);
-    border-left: 4px solid #5c6cff;
-    padding: 16px;
-    margin: 12px 0;
-    border-radius: 0 12px 12px 0;
-}
-.step-number { font-weight: bold; color: #5c6cff; font-size: 18px; margin-right: 8px; }
-
-/* Animations */
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-}
-
-/* Button Styling */
-.stButton>button {
-    width: 100%;
-    border-radius: 16px;
-    height: 55px;
-    font-size: 18px;
     font-weight: 600;
-    background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
-    border: none;
-    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-    transition: transform 0.2s;
-    color: white !important;
+    margin: 8px 0;
 }
-.stButton>button:hover {
-    transform: scale(1.02);
+.status-normal { background: linear-gradient(135deg, #00d4aa, #00a884); color: white; box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3); }
+.status-warning { background: linear-gradient(135deg, #ffb74d, #ff9800); color: white; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3); }
+.status-danger { 
+    background: linear-gradient(135deg, #ff5252, #f44336); 
+    color: white; 
+    box-shadow: 0 4px 15px rgba(255, 82, 82, 0.4);
+    animation: pulse-danger 2s infinite; 
+}
+
+@keyframes pulse-danger {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(244, 67, 54, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+}
+
+/* ====== Vitals Rows ====== */
+.vital-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px; background: rgba(20, 25, 45, 0.6);
+    border-radius: 14px; margin: 8px 0; border-left: 4px solid #4CAF50;
+}
+.vital-row.elevated { border-left-color: #FF9800; background: rgba(255, 152, 0, 0.08); }
+.vital-row.critical { border-left-color: #f44336; background: rgba(244, 67, 54, 0.12); }
+.vital-value { font-size: 20px; font-weight: 700; color: #ffffff; }
+
+/* ====== Action Buttons ====== */
+.action-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white; padding: 16px; border-radius: 16px;
+    text-align: center; font-weight: 600; margin: 8px 0; cursor: pointer;
+}
+.action-btn-emergency {
+    background: linear-gradient(135deg, #ff5252 0%, #c62828 100%);
+    color: white; padding: 16px; border-radius: 16px;
+    text-align: center; font-weight: 600; margin: 8px 0; cursor: pointer;
+    animation: pulse-danger 1.5s infinite;
+}
+
+/* ====== Streamlit Button Override ====== */
+.stButton > button {
+    width: 100%; border-radius: 16px; height: 50px; border: none;
+    font-weight: 700; font-size: 16px;
 }
 </style>
 """
 
-# 2. Presets (Patient Data Simulators)
+# 2. PRESETS
 LOW_PRESET = {
     "age": 25, "sex": "Male",
     "baseline_crp_mg_l": 0.5, "baseline_il6_pg_ml": 0.3, "baseline_tnf_alpha_pg_ml": 1.5,
@@ -113,35 +121,27 @@ HIGH_PRESET = {
     "baseline_activity_index": 0.5, "last_activity": 0.2,
 }
 
-# 3. Patient Guidance (هذا هو الجزء الجديد الذي يسبب الخطأ لعدم وجوده)
-PATIENT_GUIDANCE = {
-    0: {
-        "title": "You are doing great! 🌟",
-        "color": "green",
-        "steps": [
-            "Your immune system looks stable.",
-            "Keep wearing the patch for continuous monitoring.",
-            "No extra action needed today."
-        ]
+# 3. CLINICAL ACTIONS
+CLINICAL_ACTIONS = {
+    0: { 
+        'status': 'normal', 'badge': 'status-normal', 'icon': '✅',
+        'title': 'كل شيء طبيعي', 'title_en': 'All Clear',
+        'message': 'مؤشراتك الحيوية ضمن المعدل الطبيعي', 'message_en': 'Vital signs are normal',
+        'instructions': {'ar': ['✓ استمر في نشاطك اليومي', '✓ القياس التالي بعد 4 ساعات'], 'en': ['✓ Continue daily activity', '✓ Next check in 4 hours']},
+        'action_buttons': []
     },
-    1: {
-        "title": "Attention Needed ⚠️",
-        "color": "orange",
-        "steps": [
-            "We detected slight changes in your vitals.",
-            "Please rest and drink plenty of water.",
-            "Monitor your temperature every 6 hours.",
-            "If you feel worse, contact your care provider."
-        ]
+    1: { 
+        'status': 'warning', 'badge': 'status-warning', 'icon': '⚠️',
+        'title': 'انتبه - تحتاج متابعة', 'title_en': 'Caution Needed',
+        'message': 'تغيرات طفيفة في المؤشرات الحيوية', 'message_en': 'Slight vital signs changes',
+        'instructions': {'ar': ['📞 اتصل بطبيبك اليوم', '🌡️ قس حرارتك كل ساعتين'], 'en': ['📞 Call doctor today', '🌡️ Check temp every 2 hours']},
+        'action_buttons': [{'label': '📞 اتصل بالعيادة', 'label_en': '📞 Call Clinic', 'type': 'call'}]
     },
-    2: {
-        "title": "URGENT ACTION REQUIRED 🚨",
-        "color": "red",
-        "steps": [
-            "High inflammation markers detected.",
-            "**Go to the Emergency Room / Clinic immediately.**",
-            "Show this screen to the triage nurse.",
-            "Do not wait or sleep on it."
-        ]
+    2: { 
+        'status': 'danger', 'badge': 'status-danger', 'icon': '🚨',
+        'title': 'طوارئ - تحرك فوراً', 'title_en': 'EMERGENCY ACT NOW',
+        'message': 'مؤشرات عدوى نشطة وخطيرة', 'message_en': 'Critical infection signs',
+        'instructions': {'ar': ['🚨 توجه للطوارئ فوراً', '🚑 لا تنتظر أبداً'], 'en': ['🚨 Go to ER immediately', '🚑 Do not wait']},
+        'action_buttons': [{'label': '🚑 اتصل بالإسعاف 997', 'label_en': '🚑 Call 997', 'type': 'emergency'}, {'label': '🏥 أقرب مستشفى', 'label_en': '🏥 Nearest ER', 'type': 'map'}]
     }
 }
