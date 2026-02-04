@@ -1,32 +1,33 @@
 import streamlit as st
 
-# CSS - تنسيقات التصميم العام
 CUSTOM_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
-/* الخط العام والاتجاه */
 * {
     font-family: 'Cairo', sans-serif;
+    direction: rtl;
 }
 
-/* خلفية التطبيق - تدرج لوني هادئ جداً */
+/* الخلفية المتدرجة الناعمة كما في الصورة */
 .stApp {
-    background: linear-gradient(180deg, #F0F4F8 0%, #E2EBF0 100%);
+    background: linear-gradient(180deg, #FFFFFF 0%, #F0F7F9 100%);
     background-attachment: fixed;
 }
 
-/* إخفاء القوائم الافتراضية العلوية والسفلية */
 #MainMenu, footer, header {visibility: hidden;}
 
-/* تحسين شكل النصوص */
+/* تنسيق النصوص */
 h1, h2, h3 {
-    color: #0E5159 !important;
+    color: #1A5F7A !important; /* لون تيل طبي هادئ */
     font-weight: 700;
 }
 
-p {
-    color: #546E7A;
+/* تحسين شكل الحاويات لتبدو كأنها تطبيق جوال */
+.block-container {
+    max-width: 450px !important;
+    padding-top: 2rem !important;
+    padding-bottom: 6rem !important;
 }
 </style>
 """
