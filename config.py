@@ -1,6 +1,6 @@
 import streamlit as st
 
-# 1. التصميم البصري (CSS)
+# 1. التصميم البصري (CSS) المحدث
 CUSTOM_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
@@ -14,7 +14,7 @@ CUSTOM_CSS = """
 
 #MainMenu, footer, header {visibility: hidden;}
 
-/* كرت المعلومات */
+/* كرت المعلومات العام */
 .mobile-box {
     border-radius: 25px;
     padding: 20px;
@@ -23,14 +23,20 @@ CUSTOM_CSS = """
     border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* نمط النص الأسود الواضح للكروت البيضاء */
-.dark-text {
+/* نمط النص الأسود الواضح (للكروت البيضاء) */
+.text-black {
     color: #000000 !important;
 }
 
-.sub-text-dark {
-    color: #424242 !important;
+.text-black-small {
+    color: #333333 !important;
     font-size: 11px;
+}
+
+/* خلفية حمراء للخطر العالي */
+.bg-danger {
+    background-color: #E53935 !important;
+    color: white !important;
 }
 
 /* شريط التنقل */
@@ -50,7 +56,7 @@ CUSTOM_CSS = """
 </style>
 """
 
-# 2. إضافة البيانات المفقودة (لحل خطأ ImportError)
+# 2. تعريف البيانات المفقودة (لحل خطأ ImportError في صفحة التحليل)
 LOW_PRESET = {"last_temp": 36.6, "last_hr": 72, "last_spo2": 98, "baseline_crp_mg_l": 2.0}
 MID_PRESET = {"last_temp": 37.5, "last_hr": 92, "last_spo2": 95, "baseline_crp_mg_l": 8.0}
 HIGH_PRESET = {"last_temp": 38.8, "last_hr": 115, "last_spo2": 91, "baseline_crp_mg_l": 15.0}
@@ -58,5 +64,5 @@ HIGH_PRESET = {"last_temp": 38.8, "last_hr": 115, "last_spo2": 91, "baseline_crp
 RISK_LEVELS = {
     0: {'name_ar': 'مستقر', 'color': '#B2E2D2', 'icon': '✅'},
     1: {'name_ar': 'تنبيه', 'color': '#D7D3F7', 'icon': '⚠️'},
-    2: {'name_ar': 'خطر', 'color': '#1A5F7A', 'icon': '🚨'}
+    2: {'name_ar': 'خطر عالي', 'color': '#E53935', 'icon': '🚨'}
 }
