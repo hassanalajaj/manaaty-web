@@ -1,5 +1,6 @@
-# config.py
+import streamlit as st
 
+# 1. تصميم الواجهة (CSS)
 CUSTOM_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
@@ -175,6 +176,7 @@ section[data-testid="stSidebar"] {display: none;}
 </style>
 """
 
+# 2. القيم الافتراضية
 LOW_PRESET = {
     "baseline_temp_c": 36.7, "last_temp": 36.7,
     "baseline_hr_bpm": 70, "last_hr": 72,
@@ -196,6 +198,7 @@ HIGH_PRESET = {
     "baseline_crp_mg_l": 12.0,
 }
 
+# 3. مستويات الخطر
 RISK_LEVELS = {
     0: {
         'name_ar': 'حالة طبيعية',
@@ -222,7 +225,3 @@ RISK_LEVELS = {
         'message_en': 'Go to ER immediately'
     }
 }
-
-
-</details>
-
