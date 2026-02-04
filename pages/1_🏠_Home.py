@@ -1,161 +1,150 @@
 import streamlit as st
-# استدعاء ملف التصميم
+import pandas as pd
+import numpy as np
+
+# محاولة استدعاء التصميم العام
 try:
     from config import CUSTOM_CSS
 except:
     CUSTOM_CSS = ""
 
-st.set_page_config(page_title="Home", page_icon="🏠", layout="centered")
-
-# تطبيق التنسيق
+st.set_page_config(page_title="Manaaty Dashboard", page_icon="🧬", layout="centered")
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
-# تنسيقات خاصة بهذه الصفحة فقط (لجعلها تشبه الجوال)
+# --- تنسيقات CSS مخصصة لتحقيق شكل الجوال والألوان المريحة ---
 st.markdown("""
 <style>
-/* إزاحة المحتوى للأعلى */
-.block-container {
-    padding-top: 2rem !important;
-    padding-bottom: 5rem !important;
-}
+    .block-container { padding-top: 2rem !important; }
+    
+    /* الحاوية الأساسية للمربعات */
+    .grid-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
 
-/* شريط البحث */
-.search-box {
-    background: white;
-    border-radius: 15px;
-    padding: 12px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    color: #90A4AE;
-    display: flex;
-    align-items: center;
-    border: 1px solid #ECEFF1;
-}
+    /* تصميم المربع (Box) */
+    .status-box {
+        border-radius: 24px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        border: 1px solid rgba(255,255,255,0.3);
+    }
 
-/* البطاقات المربعة (الشبكة) */
-.grid-card {
-    border-radius: 25px;
-    padding: 20px;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.03);
-    transition: transform 0.2s;
-    margin-bottom: 15px;
-    cursor: pointer;
-}
-.grid-card:hover { transform: scale(1.02); }
+    /* الألوان المريحة (Pastel Palette) */
+    .bg-teal { background-color: #0E5159; color: white; } /* غامق للتميز */
+    .bg-lavender { background-color: #E8EAF6; color: #3949AB; } /* بنفسجي هادئ */
+    .bg-blue { background-color: #DCEAF2; color: #0E5159; } /* سماوي فاتح */
+    .bg-green { background-color: #E0F2F1; color: #00695C; } /* أخضر نعناعي */
+    .bg-white { background-color: #FFFFFF; color: #2F3E46; border: 1px solid #ECEFF1; }
 
-/* ألوان البطاقات */
-.card-teal { background: #004D40; color: white; }
-.card-light { background: #E0F7FA; color: #006064; }
-.card-purple { background: #E8EAF6; color: #3949AB; }
-.card-green { background: #E0F2F1; color: #00695C; }
-
-/* البطاقة العريضة السفلية */
-.card-wide {
-    background: linear-gradient(90deg, #42A5F5 0%, #1E88E5 100%);
-    border-radius: 20px;
-    padding: 20px;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 8px 20px rgba(33, 150, 243, 0.25);
-    margin-top: 10px;
-}
-
-/* القائمة السفلية العائمة */
-.bottom-nav {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    padding: 10px 30px;
-    border-radius: 40px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    display: flex;
-    gap: 40px;
-    z-index: 1000;
-}
-.nav-icon { font-size: 24px; cursor: pointer; opacity: 0.5; }
-.nav-icon.active { opacity: 1; color: #004D40; transform: scale(1.2); }
+    .box-title { font-size: 14px; font-weight: 700; opacity: 0.9; margin-bottom: 8px; }
+    .box-value { font-size: 20px; font-weight: 800; }
+    .box-delta { font-size: 12px; font-weight: 600; margin-top: 4px; }
+    
+    /* التوصية المنبثقة أسفل اليسار والديموغرافيك أسفل اليمين */
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 10px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# --- المحتوى ---
+# --- منطق التوصية المنبثقة (Pop-up) ---
+if "recom_shown" not in st.session_state:
+    st.toast("💡 توصية: يرجى زيادة شرب السوائل ومراقبة الحرارة كل 4 ساعات.", icon="ℹ️")
+    st.session_state.recom_shown = True
 
-# 1. الترحيب
-st.markdown(f"<h3 style='text-align: right; margin-bottom: 10px;'>مرحباً، {st.session_state.get('patient_id', 'عبير')} 👋</h3>", unsafe_allow_html=True)
+# --- المحتوى الرئيسي ---
 
-# 2. شريط البحث الوهمي
+st.markdown(f"<h3 style='text-align: right; color: #0E5159;'>مرحباً، {st.session_state.get('patient_id', 'عبير')} 👋</h3>", unsafe_allow_html=True)
+
+# 1. Risk Stratification (Box - Top Full Width)
 st.markdown("""
-<div class="search-box">
-    <span style="margin-left:10px;">🔍</span> بحث في التقارير...
+<div class="status-box bg-teal" style="margin-bottom:15px; height: 100px; justify-content: center; align-items: center;">
+    <div class="box-title">تصنيف المخاطر (Risk Stratification)</div>
+    <div class="box-value" style="font-size: 28px;">⚠️ مستوى مرتفع (High)</div>
 </div>
 """, unsafe_allow_html=True)
 
-# 3. الشبكة (المربعات)
+# 2. Grid for Vitals, Biomarkers, Trend, and Contact
 col1, col2 = st.columns(2)
 
 with col1:
-    # تقارير التحاليل (غامق)
+    # Vitals Data
     st.markdown("""
-    <div class="grid-card card-teal">
-        <div style="font-size:35px; margin-bottom:10px;">📄</div>
-        <div style="font-weight:bold;">التقارير الطبية</div>
-        <div style="font-size:12px; opacity:0.8;">آخر تحديث: اليوم</div>
+    <div class="status-box bg-lavender" style="height: 140px;">
+        <div class="box-title">العلامات الحيوية (Vitals)</div>
+        <div class="box-value">37.8°C</div>
+        <div class="box-delta">الأساس: 36.6° | التغيير: +1.2° 🔺</div>
     </div>
     """, unsafe_allow_html=True)
     
-    # نمط الحياة (بنفسجي فاتح)
+    # Trend Box
     st.markdown("""
-    <div class="grid-card card-purple">
-        <div style="font-size:35px; margin-bottom:10px;">🍎</div>
-        <div style="font-weight:bold;">نمط الحياة</div>
-        <div style="font-size:12px; opacity:0.8;">نصائح يومية</div>
+    <div class="status-box bg-white" style="height: 140px; border: 1px solid #D1E3E7;">
+        <div class="box-title">الاتجاه العام (Trend)</div>
+        <div style="font-size: 30px; text-align: center; margin-top: 10px;">📈</div>
+        <div class="box-delta" style="text-align:center;">ارتفاع تدريجي في الالتهاب</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
-    # رفع تقارير (أزرق فاتح)
+    # Biomarker Data
     st.markdown("""
-    <div class="grid-card card-light">
-        <div style="font-size:35px; margin-bottom:10px;">📤</div>
-        <div style="font-weight:bold;">رفع تقرير</div>
-        <div style="font-size:12px; opacity:0.8;">pdf, jpg</div>
+    <div class="status-box bg-green" style="height: 140px;">
+        <div class="box-title">المؤشرات (Biomarkers)</div>
+        <div class="box-value">CRP: 12.5</div>
+        <div class="box-delta">الأساس: 2.0 | التغيير: +10.5 🔺</div>
     </div>
     """, unsafe_allow_html=True)
     
-    # التوصيات (أخضر فاتح)
+    # Contact Physician
     st.markdown("""
-    <div class="grid-card card-green">
-        <div style="font-size:35px; margin-bottom:10px;">🛡️</div>
-        <div style="font-weight:bold;">التوصيات</div>
-        <div style="font-size:12px; opacity:0.8;">3 تنبيهات جديدة</div>
+    <div class="status-box bg-blue" style="height: 140px; cursor: pointer;">
+        <div class="box-title">اتصل بالطبيب</div>
+        <div style="font-size: 30px; text-align: center; margin-top: 10px;">📞</div>
+        <div class="box-delta" style="text-align:center;">تواصل فوري (24/7)</div>
     </div>
     """, unsafe_allow_html=True)
 
-# 4. مصادر تثقيفية (عريض)
-st.markdown("""
-<div class="card-wide">
-    <div>
-        <div style="font-weight:bold; font-size:18px;">مصادر تثقيفية</div>
-        <div style="font-size:12px; opacity:0.9;">تعرف أكثر على حالتك</div>
-    </div>
-    <div style="font-size:30px;">📚</div>
-</div>
-""", unsafe_allow_html=True)
+# 3. Bottom Row: Recommendations (Left) & Demographics (Right)
+st.markdown("<div class='footer-grid'>", unsafe_allow_html=True)
+col_left, col_right = st.columns(2)
 
-# 5. القائمة السفلية
+with col_left:
+    st.markdown("""
+    <div class="status-box bg-white" style="height: 120px; border-left: 5px solid #42A5F5;">
+        <div class="box-title" style="color:#1E88E5;">📋 التوصية</div>
+        <div style="font-size: 12px; line-height: 1.4;">يرجى الالتزام بالراحة التامة وتجنب الأماكن المزدحمة حالياً.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col_right:
+    st.markdown(f"""
+    <div class="status-box bg-white" style="height: 120px; text-align: right;">
+        <div class="box-title">👤 بيانات المريض</div>
+        <div style="font-size: 13px; font-weight: bold;">{st.session_state.get('patient_id', 'عبير العكوز')}</div>
+        <div style="font-size: 11px; opacity: 0.7;">العمر: 28 سنة | فصيلة الدم: O+</div>
+        <div style="font-size: 10px; margin-top: 5px;">ID: #992834</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+# شريط التنقل السفلي الوهمي
 st.markdown("""
-<div class="bottom-nav">
-    <div class="nav-icon">👤</div>
-    <div class="nav-icon active">🏠</div>
-    <div class="nav-icon">⚙️</div>
+<div style="position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); 
+            background: white; padding: 10px 40px; border-radius: 40px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; gap: 50px; z-index: 1000;">
+    <div style="font-size: 20px; opacity: 0.3;">👤</div>
+    <div style="font-size: 24px; color: #0E5159;">🏠</div>
+    <div style="font-size: 20px; opacity: 0.3;">⚙️</div>
 </div>
 """, unsafe_allow_html=True)
