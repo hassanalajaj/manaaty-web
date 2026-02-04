@@ -14,15 +14,10 @@ CUSTOM_CSS = """
     --green: #7ec8a3;
     --orange: #f4a261;
     --red: #e76f51;
-    --bg: #f0f9fb;
-    --card-bg: white;
-    --text: #2c3e50;
-    --text-light: #546e7a;
 }
 
 html, body {
     background: linear-gradient(135deg, #f0f9fb 0%, #e1f0f5 100%);
-    color: var(--text);
 }
 
 .main {
@@ -35,27 +30,15 @@ html, body {
     padding: 1rem !important;
 }
 
-/* Hide Streamlit elements */
 #MainMenu, footer, header {visibility: hidden;}
 section[data-testid="stSidebar"] {display: none;}
 
-/* Logo Background */
 .logo-container {
     text-align: center;
     padding: 30px 20px;
     background: linear-gradient(135deg, var(--teal) 0%, #156270 100%);
     margin: -1rem -1rem 20px -1rem;
     border-radius: 0 0 30px 30px;
-}
-
-.logo-img {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 25px;
-    padding: 15px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
 }
 
 .app-title {
@@ -71,14 +54,12 @@ section[data-testid="stSidebar"] {display: none;}
     margin-top: 8px;
 }
 
-/* Card */
 .card {
     background: white;
     border-radius: 20px;
     padding: 24px;
     margin: 16px 0;
     box-shadow: 0 4px 20px rgba(26, 127, 142, 0.08);
-    border: 1px solid #e8f4f8;
 }
 
 .card-title {
@@ -88,7 +69,6 @@ section[data-testid="stSidebar"] {display: none;}
     margin-bottom: 16px;
 }
 
-/* Status Cards */
 .status-card {
     border-radius: 18px;
     padding: 24px;
@@ -126,15 +106,8 @@ section[data-testid="stSidebar"] {display: none;}
 .status-title {
     font-size: 24px;
     font-weight: 700;
-    margin: 12px 0;
 }
 
-.status-message {
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* Vital Grid */
 .vital-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -147,34 +120,11 @@ section[data-testid="stSidebar"] {display: none;}
     border-radius: 16px;
     padding: 20px;
     text-align: center;
-    border: 2px solid transparent;
-    transition: all 0.3s;
-}
-
-.vital-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(26, 127, 142, 0.15);
-}
-
-.vital-box.warning {
-    background: #fff5e6;
-    border-color: var(--orange);
-}
-
-.vital-box.danger {
-    background: #ffe5e2;
-    border-color: var(--red);
 }
 
 .vital-icon {
     font-size: 36px;
     margin-bottom: 8px;
-}
-
-.vital-label {
-    font-size: 12px;
-    color: var(--text-light);
-    margin-bottom: 6px;
 }
 
 .vital-value {
@@ -183,26 +133,6 @@ section[data-testid="stSidebar"] {display: none;}
     color: var(--teal);
 }
 
-/* Buttons */
-.stButton > button {
-    width: 100%;
-    background: linear-gradient(135deg, var(--teal) 0%, #156270 100%);
-    color: white;
-    border: none;
-    border-radius: 16px;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(26, 127, 142, 0.25);
-    transition: all 0.3s;
-}
-
-.stButton > button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(26, 127, 142, 0.35);
-}
-
-/* Device Status */
 .device-bar {
     display: flex;
     justify-content: space-around;
@@ -219,72 +149,32 @@ section[data-testid="stSidebar"] {display: none;}
 
 .device-icon {
     font-size: 24px;
-    opacity: 0.7;
-}
-
-.device-label {
-    font-size: 11px;
-    color: var(--text-light);
-    margin-top: 4px;
 }
 
 .device-value {
     font-size: 18px;
     font-weight: 700;
     color: var(--teal);
-    margin-top: 4px;
 }
 
-/* Icon Grid */
-.icon-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin: 20px 0;
-}
-
-.icon-card {
-    background: white;
+.stButton > button {
+    width: 100%;
+    background: linear-gradient(135deg, var(--teal) 0%, #156270 100%);
+    color: white;
+    border: none;
     border-radius: 16px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.icon-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(26, 127, 142, 0.15);
-}
-
-.icon-card-icon {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
-
-.icon-card-label {
-    font-size: 13px;
-    color: var(--text);
-    font-weight: 600;
-}
-
-/* Input */
-.stTextInput input {
-    border-radius: 12px;
-    border: 2px solid var(--teal-light);
-    padding: 14px;
+    padding: 16px;
     font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(26, 127, 142, 0.25);
 }
 
-.stTextInput input:focus {
-    border-color: var(--teal);
+.stButton > button:hover {
+    transform: translateY(-2px);
 }
-
 </style>
 """
 
-# Presets (only 3 states: Low, Mid, High)
 LOW_PRESET = {
     "baseline_temp_c": 36.7, "last_temp": 36.7,
     "baseline_hr_bpm": 70, "last_hr": 72,
@@ -333,4 +223,6 @@ RISK_LEVELS = {
     }
 }
 
+
+</details>
 
