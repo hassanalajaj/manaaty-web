@@ -1,69 +1,31 @@
 import streamlit as st
-from config import CUSTOM_CSS
+# نستورد الألوان والتصميم من ملف الإعدادات
+try:
+    from config import CUSTOM_CSS, COLORS
+except ImportError:
+    CUSTOM_CSS = ""
+    COLORS = {"primary": "#1A5F7A"} # لون احتياطي
 
-st.set_page_config(
-    page_title="Manaaty",
-    page_icon="🧬",
-    layout="centered",
-    initial_sidebar_state="collapsed"
-)
-
+st.set_page_config(page_title="Manaaty | مناعتي", page_icon="🧬", layout="centered")
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-    st.session_state.language = "ar"
+# --- إضافة اللوقو في الأعلى ---
+# استخدمنا الأعمدة لوضع اللوقو في المنتصف بشكل أنيق
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    # تأكد أن اسم الملف مطابق للموجود في مجلد assets
+    # يمكنك التحكم في الحجم بتغيير width
+    st.image("assets/logo.png", width=150) 
 
-if st.session_state.logged_in:
-    st.switch_page("pages/1_🏠_Home.py")
+st.markdown(f"<h1 style='text-align: center; color: {COLORS['primary']}; margin-top: -20px;'>مناعتي</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #607D8B;'>نظام الكشف المبكر عن العدوى</p>", unsafe_allow_html=True)
+st.markdown("---")
 
-lang = st.session_state.language
-
-# --- قسم الهيدر (الشعار) بتصميم المنحنى الجديد ---
-st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-st.markdown('<div style="font-size:60px; margin-bottom:10px;">🧬</div>', unsafe_allow_html=True)
-st.markdown(f'<h1 class="app-title">{"مناعتي" if lang == "ar" else "Manaaty"}</h1>', unsafe_allow_html=True)
-st.markdown(f'<p class="app-subtitle">{"رعايـة ذكيـة .. لحياة آمنـة" if lang == "ar" else "Smart Care for a Safe Life"}</p>', unsafe_allow_html=True)
+# --- باقي محتوى الصفحة الأولى (مثلاً تسجيل الدخول) ---
+# (أكمل بقية الكود الخاص بك هنا، مثل حقول الإدخال والأزرار)
+# مثال بسيط:
+st.markdown('<div class="mobile-box" style="background: white; text-align: center;">', unsafe_allow_html=True)
+st.text_input("رقم الملف الطبي", placeholder="ID")
+st.text_input("كلمة المرور", type="password", placeholder="Password")
+st.button("تسجيل الدخول", type="primary", use_container_width=True)
 st.markdown('</div>', unsafe_allow_html=True)
-
-# --- كارد تسجيل الدخول (زجاجي) ---
-st.markdown('<div class="card">', unsafe_allow_html=True)
-
-st.markdown(f'<h3 style="text-align:center; margin-bottom: 20px; color:#4FA6B3;">{"أهلاً بك مجدداً" if lang == "ar" else "Welcome Back"}</h3>', unsafe_allow_html=True)
-
-# حقول الإدخال
-patient_id = st.text_input("🆔", placeholder=("رقم الملف الطبي" if lang == "ar" else "Medical File ID"))
-password = st.text_input("🔒", placeholder=("كلمة المرور" if lang == "ar" else "Password"), type="password")
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# زر الدخول الكبير
-if st.button(("تسجيل الدخول" if lang == "ar" else "Login"), type="primary", use_container_width=True):
-    if patient_id and password:
-        st.session_state.patient_id = patient_id
-        st.session_state.logged_in = True
-        st.switch_page("pages/1_🏠_Home.py")
-    else:
-        st.toast("⚠️ " + ("البيانات غير مكتملة" if lang == "ar" else "Missing credentials"))
-
-# خيارات إضافية (اللغة والديمو)
-st.markdown("<br>", unsafe_allow_html=True)
-c1, c2 = st.columns(2)
-with c1:
-    if st.button("English / عربي"):
-        st.session_state.language = "en" if lang == "ar" else "ar"
-        st.rerun()
-with c2:
-    if st.button("تجربة (Demo)"):
-        st.session_state.patient_id = "Demo-User"
-        st.session_state.logged_in = True
-        st.switch_page("pages/1_🏠_Home.py")
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# تذييل بسيط
-st.markdown(f"""
-<div style="text-align: center; margin-top: 30px; opacity: 0.6;">
-    <p style="font-size: 12px;">© 2024 Manaaty Health System</p>
-</div>
-""", unsafe_allow_html=True)
